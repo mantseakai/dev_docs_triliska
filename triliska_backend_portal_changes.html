@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Triliska Backend Portal Changes</title>
+<style>
+:root{
+  --font-sans:"Avenir Next","Segoe UI",sans-serif;
+  --color-background-canvas:#f4efe7;
+  --color-background-primary:rgba(255,255,255,0.92);
+  --color-background-secondary:#f7f1ea;
+  --color-background-info:#133c55;
+  --color-surface-strong:#fffdf9;
+  --color-text-primary:#1d2935;
+  --color-text-secondary:#5b6773;
+  --color-text-tertiary:#7c8792;
+  --color-text-info:#fefcf7;
+  --color-border-secondary:rgba(29,41,53,0.14);
+  --color-border-tertiary:rgba(29,41,53,0.08);
+  --color-border-info:#133c55;
+  --border-radius-md:14px;
+  --border-radius-lg:22px;
+  --shadow-soft:0 18px 45px rgba(32,39,48,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  font-family:var(--font-sans);
+  color:var(--color-text-primary);
+  background:
+    radial-gradient(circle at top left, rgba(244,196,72,0.2), transparent 32%),
+    radial-gradient(circle at top right, rgba(19,60,85,0.16), transparent 30%),
+    linear-gradient(180deg, #f9f4eb 0%, var(--color-background-canvas) 100%);
+}
+.page{
+  width:min(1180px,calc(100% - 32px));
+  margin:0 auto;
+  padding:40px 0 56px;
+}
+.page::before{
+  content:"";
+  position:fixed;
+  inset:24px;
+  border:1px solid rgba(19,60,85,0.08);
+  border-radius:28px;
+  pointer-events:none;
+}
+.shell{
+  background:linear-gradient(180deg, rgba(255,255,255,0.82), rgba(255,253,249,0.95));
+  border:1px solid rgba(255,255,255,0.65);
+  box-shadow:var(--shadow-soft);
+  border-radius:32px;
+  overflow:hidden;
+  backdrop-filter:blur(10px);
+}
+.hero{
+  padding:34px 34px 26px;
+  background:
+    linear-gradient(135deg, rgba(19,60,85,0.96), rgba(35,94,104,0.92)),
+    linear-gradient(135deg, #133c55, #235e68);
+  color:#f9f4eb;
+}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.14);
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-size:clamp(2rem,3vw,3.25rem);
+  line-height:1.02;
+  margin:18px 0 12px;
+  max-width:12ch;
+}
+.hero p{
+  max-width:820px;
+  color:rgba(249,244,235,0.86);
+  font-size:15px;
+  line-height:1.7;
+}
+.hero-metrics{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:12px;
+  margin-top:22px;
+}
+.metric{
+  padding:14px 16px;
+  border-radius:18px;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.12);
+}
+.metric strong{
+  display:block;
+  font-size:1.45rem;
+  margin-bottom:4px;
+}
+.metric span{
+  font-size:12px;
+  color:rgba(249,244,235,0.78);
+}
+.content{
+  padding:30px 34px 36px;
+}
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap;
+  border:0;
+}
+.wrap{padding:0;font-family:var(--font-sans)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.tab{padding:10px 16px;border-radius:999px;border:1px solid var(--color-border-secondary);font-size:13px;cursor:pointer;background:rgba(255,255,255,0.8);color:var(--color-text-secondary);transition:all .2s ease;font-weight:600}
+.tab.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.tab:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(19,60,85,0.12)}
+.section{margin-bottom:2rem}
+.section-title{font-size:17px;font-weight:700;color:var(--color-text-primary);margin-bottom:1rem;padding-bottom:10px;border-bottom:1px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:500}
+.badge-add{background:#c0dd97;color:#27500A}
+.badge-remove{background:#F7C1C1;color:#791F1F}
+.badge-change{background:#FAC775;color:#633806}
+.badge-new{background:#CECBF6;color:#26215C}
+.change-row{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--color-border-tertiary);align-items:flex-start}
+.change-row:last-child{border-bottom:none}
+.change-icon{width:38px;height:38px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;color:#fff;box-shadow:0 8px 18px rgba(0,0,0,0.08)}
+.ci-add{background:#639922}
+.ci-remove{background:#A32D2D}
+.ci-change{background:#BA7517}
+.ci-new{background:#534AB7}
+.change-text{flex:1}
+.change-label{font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:4px}
+.change-detail{font-size:13px;color:var(--color-text-secondary);line-height:1.65}
+.tag{display:inline-block;padding:4px 9px;border-radius:99px;font-size:11px;border:1px solid var(--color-border-secondary);color:var(--color-text-secondary);margin-right:6px;margin-top:8px;background:rgba(255,255,255,0.72)}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:1.75rem}
+.module-card{background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(247,241,234,0.95));border:1px solid var(--color-border-tertiary);border-radius:24px;padding:1.15rem;box-shadow:0 14px 28px rgba(29,41,53,0.06)}
+.module-card-title{font-size:15px;font-weight:700;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.module-icon{width:34px;height:34px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.module-card ul{list-style:none;padding:0}
+.module-card li{font-size:13px;color:var(--color-text-secondary);padding:6px 0;border-bottom:1px solid var(--color-border-tertiary);line-height:1.55}
+.module-card li:last-child{border-bottom:none}
+.module-card li::before{content:"· ";color:var(--color-text-tertiary)}
+.who{font-size:11px;color:var(--color-text-tertiary);margin-top:12px;text-transform:uppercase;letter-spacing:.06em}
+table{width:100%;border-collapse:collapse;font-size:13px;background:var(--color-surface-strong);border-radius:22px;overflow:hidden}
+th{text-align:left;padding:12px 10px;font-weight:700;font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-bottom:1px solid var(--color-border-secondary)}
+td{padding:12px 10px;border-bottom:1px solid var(--color-border-tertiary);vertical-align:top;font-size:13px;color:var(--color-text-primary)}
+tr:last-child td{border-bottom:none}
+.y{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#c0dd97;color:#3B6D11;font-size:11px;font-weight:500}
+.n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#F7C1C1;color:#A32D2D;font-size:11px;font-weight:500}
+.p{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#FAC775;color:#633806;font-size:11px;font-weight:500}
+.note{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.callout{
+  background:linear-gradient(180deg, rgba(247,241,234,0.96), rgba(255,255,255,0.95));
+  border:1px solid var(--color-border-tertiary);
+  border-radius:24px;
+  padding:20px;
+  margin-top:.5rem;
+}
+@media (max-width: 760px){
+  .page{width:min(100% - 18px,1180px);padding:12px 0 24px}
+  .page::before{display:none}
+  .hero,.content{padding:24px 18px}
+  .tab{width:100%;justify-content:center}
+  .change-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<main class="page">
+  <section class="shell">
+    <header class="hero">
+      <span class="eyebrow">Triliska Planning Review</span>
+      <h1>Backend portal additions for programme staff</h1>
+      <p>This page organizes the proposed backend improvements into a cleaner brief: what to add, what to change, and how access should be scoped across roles.</p>
+      <div class="hero-metrics">
+        <div class="metric"><strong>8</strong><span>recommended staff-assist modules</span></div>
+        <div class="metric"><strong>3</strong><span>review views with tabbed navigation</span></div>
+        <div class="metric"><strong>Role-based</strong><span>access guidance embedded throughout</span></div>
+      </div>
+    </header>
+    <div class="content">
+<div class="wrap">
+<h2 class="sr-only">Triliska backend portal additions and changes for programme staff</h2>
+<div class="tabs">
+  <button class="tab active" onclick="show('additions')">Staff portal additions</button>
+  <button class="tab" onclick="show('changes')">Full change list</button>
+  <button class="tab" onclick="show('matrix')">Staff access matrix</button>
+</div>
+
+<div id="additions">
+<p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.6">These are the modules recommended to add to the web backend portal so programme staff can prepare an MSME's full setup from a desktop — before handing over the POS device to the trader. All of these are staff-assist features; the business owner takes over once onboarding is complete.</p>
+
+<div class="module-grid">
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#B5D4F4;color:#0C447C">📦</div>
+    Product master
+  </div>
+  <ul>
+    <li>Create / edit products per MSME</li>
+    <li>Set name, SKU, barcode, price, cost, tax flag</li>
+    <li>Assign product category and unit of measure</li>
+    <li>Expiry date field (pharmaceutical sector)</li>
+    <li>CSV bulk import with validation error report</li>
+    <li>Download product template CSV</li>
+    <li>Deactivate / archive products</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#9FE1CB;color:#085041">🏪</div>
+    Stores &amp; warehouses
+  </div>
+  <ul>
+    <li>Create named store / warehouse locations per MSME</li>
+    <li>Set default store for POS</li>
+    <li>View stock levels per store</li>
+    <li>Record inter-store stock transfers</li>
+    <li>Mark stores as active / inactive</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#CECBF6;color:#3C3489">📊</div>
+    Opening stock setup
+  </div>
+  <ul>
+    <li>CSV bulk opening stock import per MSME</li>
+    <li>Manual opening stock entry per product</li>
+    <li>Assign opening stock to specific store</li>
+    <li>Download stock template CSV</li>
+    <li>View stock import history and errors</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#FAC775;color:#633806">✅</div>
+    Onboarding checklist
+  </div>
+  <ul>
+    <li>Per-MSME progress tracker (% complete)</li>
+    <li>Steps: Registered → Profile complete → Products loaded → Stock set → Device linked → First sale</li>
+    <li>Flag blocked items needing follow-up</li>
+    <li>Staff can mark steps complete with notes</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff, Supervisors, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#F4C0D1;color:#72243E">📱</div>
+    Device management
+  </div>
+  <ul>
+    <li>Link Sunmi device serial number to MSME</li>
+    <li>View last sync timestamp per device</li>
+    <li>View online / offline status</li>
+    <li>Unlink / reassign device</li>
+    <li>Force sync trigger (admin only)</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#F5C4B3;color:#712B13">📝</div>
+    Visit log &amp; field notes
+  </div>
+  <ul>
+    <li>Log visits to MSME with date, duration, purpose</li>
+    <li>Record training given (products, POS, tax)</li>
+    <li>Flag issues needing supervisor escalation</li>
+    <li>Photo attachment (optional)</li>
+    <li>Visible to supervisor and admin</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff. Visible to Supervisors, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#D3D1C7;color:#444441">📋</div>
+    Categories &amp; units setup
+  </div>
+  <ul>
+    <li>Create product categories per MSME (or global templates)</li>
+    <li>Create units of measure (e.g. piece, kg, box, litre)</li>
+    <li>Global category templates that staff can apply to any MSME</li>
+    <li>Sector-specific category presets (e.g. pharmaceutical, food, general retail)</li>
+  </ul>
+  <div class="who">Who uses it: Programme Staff, Admin</div>
+</div>
+
+<div class="module-card">
+  <div class="module-card-title">
+    <div class="module-icon" style="background:#EAF3DE;color:#3B6D11">📈</div>
+    Staff performance dashboard
+  </div>
+  <ul>
+    <li>MSMEs assigned vs onboarded (% complete)</li>
+    <li>Products loaded this week / month</li>
+    <li>Visits logged this week</li>
+    <li>Escalations pending</li>
+    <li>Visible to supervisor scoped to their team</li>
+  </ul>
+  <div class="who">Who uses it: Programme Supervisors, Admin</div>
+</div>
+
+</div>
+
+<div class="callout">
+  <div style="font-size:14px;font-weight:700;color:var(--color-text-primary);margin-bottom:8px">Why add product master to the backend portal — not just the POS?</div>
+  <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.7">
+    Programme staff working on a desktop have a full keyboard, large screen, and can handle a multi-row CSV with hundreds of products efficiently. Doing the same task on a 5.99" Sunmi screen is slow, error-prone, and unsuitable for bulk setup. The web portal also lets staff pre-load an MSME's full product catalogue <em>before</em> visiting the market — the trader opens their POS and everything is already there. This removes a significant onboarding bottleneck and means the first visit is focused on training, not data entry.
+  </div>
+</div>
+</div>
+
+<div id="changes" style="display:none">
+
+<div class="section">
+  <div class="section-title"><span class="badge badge-remove">Remove</span> Items to remove from the current backend</div>
+  <div class="change-row">
+    <div class="change-icon ci-remove">✕</div>
+    <div class="change-text">
+      <div class="change-label">Payments nav item — hide from all non-owner views</div>
+      <div class="change-detail">Only Business Owners can initiate tax payments. Remove the Payments section (including the "Pay Now" button) from Admin, Programme Supervisor, Programme Staff, and GRA views. Admin may see payment history for oversight only — no initiation capability.</div>
+      <div><span class="tag">Admin</span><span class="tag">Supervisor</span><span class="tag">Programme Staff</span><span class="tag">GRA</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-remove">✕</div>
+    <div class="change-text">
+      <div class="change-label">Submissions section — disable until middleware endpoint is defined</div>
+      <div class="change-detail">The current Submissions screen has unclear requirements, mixes Odoo Import and CSV source types, and has no defined endpoint from the Aliska middleware. Disable the nav item and surface a placeholder until the submission flow is formally specified. Data should flow directly from POS to the backend database — no manual re-submission to GRA.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-remove">✕</div>
+    <div class="change-text">
+      <div class="change-label">SGD currency — replace with GHS throughout</div>
+      <div class="change-detail">All monetary values display as SGD (Singapore Dollar). Must be replaced with GHS (Ghana Cedis, GH₵) across the dashboard, payments screen, submissions, and all reports. This is a correctness issue — the system is deployed for Ghana.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-remove">✕</div>
+    <div class="change-text">
+      <div class="change-label">"admin" label in top-right — rename to Programme Admin</div>
+      <div class="change-detail">The top-right user pill shows the generic string "admin". It should display the logged-in user's full name with their role badge (e.g. "Robert Nettey · Programme Admin"). Avoids confusion with business-level admin concepts.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="badge badge-add">Add</span> Items to add — programme operations</div>
+  <div class="change-row">
+    <div class="change-icon ci-add">+</div>
+    <div class="change-text">
+      <div class="change-label">Role-scoped dashboard — different views per role</div>
+      <div class="change-detail">The current dashboard is a single shared view. It must be role-aware: Admin sees programme-wide KPIs. Supervisor sees their staff's companies and team metrics. Business Owner sees business performance (revenue, stock alerts, tax due). GRA Staff sees compliance and submission summary only.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-add">+</div>
+    <div class="change-text">
+      <div class="change-label">Onboarding progress tracker on dashboard (Admin + Supervisor)</div>
+      <div class="change-detail">KPI cards showing the pipeline: total MSMEs registered → products loaded → inventory set → POS device linked → first sale recorded. Shows how many MSMEs are at each stage. Critical for tracking pilot readiness at Makola Market.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-add">+</div>
+    <div class="change-text">
+      <div class="change-label">Programme Staff section — assignments, activity, performance</div>
+      <div class="change-detail">A dedicated section for Admins and Supervisors to: view all programme staff, see company assignments per staff member, track visit logs, and review staff performance KPIs (MSMEs onboarded, products loaded, escalations pending).</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-add">+</div>
+    <div class="change-text">
+      <div class="change-label">Zone / district filter on Companies list and dashboard</div>
+      <div class="change-detail">Companies list must be filterable by district and zone. Dashboard KPI cards must auto-scope to the logged-in user's zone. Programme Supervisors should only see MSMEs under their assigned staff — this must be enforced at the API level, not just the UI.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-add">+</div>
+    <div class="change-text">
+      <div class="change-label">Tax compliance status column on Companies list</div>
+      <div class="change-detail">A status column per MSME showing: Not started / Products loaded / Sales active / Submission pending / Up to date. Gives instant operational status without drilling into each record. Colour-coded: grey → amber → green progression.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-add">+</div>
+    <div class="change-text">
+      <div class="change-label">GRA Staff dashboard — compliance reporting view</div>
+      <div class="change-detail">Dedicated read-only view for GRA Officers: total registered MSMEs, MSMEs with pending submissions, total tax collected to date, download reports by period / district / sector. No business operations data visible to GRA.</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="badge badge-new">New</span> New modules — staff-assist for business owners</div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Product master management module</div>
+      <div class="change-detail">Web-based product creation and editing per MSME. Full product fields: name, SKU, barcode, category, unit, selling price, cost price, tax applicability, expiry date (pharmaceutical). CSV bulk import with validation report and template download. Deactivate / archive products. Much more efficient than entering products on a 5.99" POS screen.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Product categories &amp; units of measure setup</div>
+      <div class="change-detail">Create and manage product categories and units per MSME. Global category templates that staff can apply across MSMEs. Sector-specific presets (e.g. pharmaceutical, food retail, general merchandise) to speed up onboarding.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Stores &amp; warehouses setup module</div>
+      <div class="change-detail">Create named store or warehouse locations per MSME from the web portal. Set the default store for POS operations. View stock levels per store. Record inter-store stock transfers. Mark stores as active or inactive.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Opening stock setup module</div>
+      <div class="change-detail">CSV bulk opening stock import per MSME with validation feedback. Manual entry form for single-product stock setup. Assign opening stock to specific store location. Download stock template CSV. View stock import history and error log.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Onboarding checklist per MSME</div>
+      <div class="change-detail">Step-by-step onboarding tracker: Registered → Profile complete → Products loaded → Opening stock set → Stores configured → Device linked → Owner trained → First sale recorded. Staff can mark steps complete with notes. Supervisors see aggregate completion rates across their caseload.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Supervisors</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Device management module</div>
+      <div class="change-detail">Link Sunmi device serial number to an MSME. View last sync timestamp and online / offline status per device. Unlink and reassign devices. Admin-only: force sync trigger. Critical for diagnosing issues when traders cannot sync sales.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-new">★</div>
+    <div class="change-text">
+      <div class="change-label">Visit log &amp; field notes module</div>
+      <div class="change-detail">Programme staff log each MSME visit with date, purpose, duration, and notes. Record training delivered (products setup, POS walkthrough, tax explanation). Flag issues for supervisor escalation. Visit history visible to supervisor and admin. Provides accountability and audit trail for the programme.</div>
+      <div><span class="tag">Programme Staff</span><span class="tag">Supervisors</span><span class="tag">Admin</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="badge badge-change">Clarify</span> Items needing a decision before building</div>
+  <div class="change-row">
+    <div class="change-icon ci-change">?</div>
+    <div class="change-text">
+      <div class="change-label">Submission flow — automated or manually triggered?</div>
+      <div class="change-detail">Data should go directly from POS to the Triliska database. But who triggers the GRA submission — does the system generate it automatically on a monthly schedule, or does the Business Owner manually confirm each submission from the portal? The current demo shows a manual button. Confirm the intended flow with Aliska before building the Submissions module.</div>
+    </div>
+  </div>
+  <div class="change-row">
+    <div class="change-icon ci-change">?</div>
+    <div class="change-text">
+      <div class="change-label">POS sync target — custom backend or Odoo?</div>
+      <div class="change-detail">The backend currently shows "Odoo Import" as a submission source type. The architecture decision (PRD v4.2 Odoo path vs TRD v1.2 custom FastAPI path) is still open. Product master, inventory, and stock modules must be built against the agreed data store. This decision must be made before Sprint 1B begins.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div id="matrix" style="display:none">
+<p style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.6">Access to the new staff-assist modules in the backend portal. Business Owner accesses the same data from the POS app, not the backend portal.</p>
+<div style="overflow-x:auto">
+<table>
+<thead>
+<tr>
+  <th style="min-width:180px">Module</th>
+  <th>Admin</th><th>Supervisor</th><th>Programme Staff</th>
+  <th>Business Owner</th><th>Power User</th><th>Business Staff</th><th>GRA Staff</th>
+</tr>
+</thead>
+<tbody>
+<tr><td colspan="8" style="background:var(--color-background-secondary);font-size:12px;font-weight:500;color:var(--color-text-secondary);padding:6px 10px">New staff-assist modules</td></tr>
+<tr>
+  <td>Product master (web)</td>
+  <td><span class="y">Y</span></td><td><span class="n">N</span></td><td><span class="y">Y</span><div class="note">Assigned MSMEs only</div></td>
+  <td><span class="p">P</span><div class="note">Via POS app</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Product categories &amp; units</td>
+  <td><span class="y">Y</span></td><td><span class="n">N</span></td><td><span class="y">Y</span></td>
+  <td><span class="p">P</span><div class="note">Via POS app</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Stores &amp; warehouses setup</td>
+  <td><span class="y">Y</span></td><td><span class="n">N</span></td><td><span class="y">Y</span></td>
+  <td><span class="p">P</span><div class="note">Via POS app</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Opening stock setup</td>
+  <td><span class="y">Y</span></td><td><span class="n">N</span></td><td><span class="y">Y</span></td>
+  <td><span class="p">P</span><div class="note">Via POS app</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Onboarding checklist</td>
+  <td><span class="y">Y</span></td><td><span class="y">Y</span><div class="note">Own staff's MSMEs</div></td><td><span class="y">Y</span><div class="note">Own MSMEs only</div></td>
+  <td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Device management</td>
+  <td><span class="y">Y</span></td><td><span class="n">N</span></td><td><span class="p">P</span><div class="note">View + link only</div></td>
+  <td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Visit log &amp; field notes</td>
+  <td><span class="y">Y</span></td><td><span class="y">Y</span><div class="note">Read own staff logs</div></td><td><span class="y">Y</span><div class="note">Create own logs</div></td>
+  <td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr>
+  <td>Staff performance dashboard</td>
+  <td><span class="y">Y</span></td><td><span class="y">Y</span><div class="note">Own team only</div></td><td><span class="n">N</span></td>
+  <td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+</tr>
+<tr><td colspan="8" style="background:var(--color-background-secondary);font-size:12px;font-weight:500;color:var(--color-text-secondary);padding:6px 10px">Existing modules — access clarification</td></tr>
+<tr>
+  <td>Dashboard</td>
+  <td><span class="y">Y</span></td><td><span class="y">Y</span></td><td><span class="y">Y</span></td>
+  <td><span class="y">Y</span><div class="note">Business metrics</div></td><td><span class="p">P</span></td><td><span class="n">N</span></td><td><span class="y">Y</span><div class="note">Compliance view</div></td>
+</tr>
+<tr>
+  <td>Companies</td>
+  <td><span class="y">Y</span></td><td><span class="p">P</span><div class="note">Staff's MSMEs</div></td><td><span class="p">P</span><div class="note">Assigned only</div></td>
+  <td><span class="p">P</span><div class="note">Own only</div></td><td><span class="p">P</span><div class="note">Own only</div></td><td><span class="n">N</span></td><td><span class="p">P</span><div class="note">Read-only</div></td>
+</tr>
+<tr>
+  <td>Submissions</td>
+  <td><span class="y">Y</span></td><td><span class="p">P</span><div class="note">Staff's MSMEs</div></td><td><span class="n">N</span></td>
+  <td><span class="y">Y</span><div class="note">Own company</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="y">Y</span></td>
+</tr>
+<tr>
+  <td>Payments</td>
+  <td><span class="p">P</span><div class="note">View history only</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td>
+  <td><span class="y">Y</span><div class="note">Initiate + view</div></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="p">P</span><div class="note">View only</div></td>
+</tr>
+<tr>
+  <td>Audit logs</td>
+  <td><span class="y">Y</span></td><td><span class="p">P</span><div class="note">Staff's actions</div></td><td><span class="n">N</span></td>
+  <td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="n">N</span></td><td><span class="p">P</span><div class="note">Read-only</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<script>
+function show(id){
+  ['additions','changes','matrix'].forEach(s=>{
+    document.getElementById(s).style.display=s===id?'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    t.classList.toggle('active',['additions','changes','matrix'][i]===id);
+  });
+}
+</script>
+    </div>
+  </section>
+</main>
+</body>
+</html>
