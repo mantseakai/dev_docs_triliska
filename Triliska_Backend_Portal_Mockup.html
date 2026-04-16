@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triliska Backend Portal — Redesign Mockup v2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0D1B2A;--i2:#2C3E50;--i3:#64748B;--i4:#94A3B8;--bg:#F8FAFC;--b2:#F1F5F9;--b3:#E2E8F0;--sr:#FFF;--brand:#0F4C81;--bm:#1A6DB5;--bl:#E8F1FA;--bb:#BAD4F0;--ac:#1DB954;--al:#E6F8ED;--am:#D97706;--aml:#FEF3C7;--rd:#DC2626;--rl:#FEE2E2;--tl:#0D9488;--tt:#CCFBF1;--pu:#7C3AED;--pl:#EDE9FE;--rsm:6px;--rmd:10px;--rlg:16px;--sh:0 1px 3px rgba(13,27,42,.08),0 1px 2px rgba(13,27,42,.04);--shm:0 4px 16px rgba(13,27,42,.1),0 2px 4px rgba(13,27,42,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;min-height:100vh}
+/* layout */
+.lay{display:flex;min-height:100vh}
+.sb{width:216px;flex-shrink:0;background:var(--ink);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sbl{padding:14px 14px 11px;border-bottom:1px solid rgba(255,255,255,.08)}
+.wm{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.3px}
+.sub{font-size:8.5px;color:rgba(255,255,255,.35);margin-top:1px;letter-spacing:.5px;text-transform:uppercase}
+.ss{padding:11px 0 3px}
+.sl{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.28);padding:0 11px 4px;font-weight:500}
+.ni{display:flex;align-items:center;gap:7px;padding:6px 11px;cursor:pointer;color:rgba(255,255,255,.58);font-size:12px;transition:all .15s;border-left:3px solid transparent}
+.ni:hover{color:#fff;background:rgba(255,255,255,.06)}
+.ni.on{color:#fff;background:rgba(255,255,255,.1);border-left-color:#4A9EE8}
+.nb{margin-left:auto;background:var(--rd);color:#fff;font-size:8.5px;font-weight:600;padding:1px 5px;border-radius:99px}
+.sbot{margin-top:auto;padding:11px;border-top:1px solid rgba(255,255,255,.08)}
+.uc{display:flex;align-items:center;gap:7px;padding:5px 7px;border-radius:var(--rmd);background:rgba(255,255,255,.08);cursor:pointer}
+.ua{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#4A9EE8,var(--bm));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;flex-shrink:0}
+.un{font-size:11px;font-weight:500;color:#fff}
+.ur{font-size:8.5px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.1);padding:1px 5px;border-radius:99px;display:inline-block;margin-top:1px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.tabs{background:var(--i2);padding:4px 20px;display:flex;gap:3px;overflow-x:auto;flex-shrink:0}
+.tab{padding:4px 10px;border-radius:var(--rmd);font-size:10.5px;color:rgba(255,255,255,.5);cursor:pointer;white-space:nowrap;transition:all .15s;border:1px solid transparent}
+.tab:hover{color:#fff}
+.tab.on{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.14)}
+.topbar{background:var(--sr);border-bottom:1px solid var(--b3);padding:0 20px;height:48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.tbr{display:flex;align-items:center;gap:6px}
+.ibtn{width:28px;height:28px;border-radius:var(--rmd);border:1px solid var(--b3);background:var(--sr);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:11px}
+.dot{width:5px;height:5px;background:var(--rd);border-radius:50%;position:absolute;top:4px;right:4px;border:1.5px solid var(--sr)}
+.bc{font-size:11px;color:var(--i4);display:flex;align-items:center;gap:4px}
+.bc .cur{color:var(--ink);font-weight:500}
+.cnt{padding:20px;flex:1;overflow-y:auto}
+.scr{display:none}
+.scr.v{display:block}
+/* page */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:18px}
+.ph h1{font-size:19px;font-weight:600;color:var(--ink);letter-spacing:-.3px}
+.ph p{font-size:12px;color:var(--i3);margin-top:3px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--rmd);font-size:12px;font-weight:500;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
+.bp{background:var(--brand);color:#fff}.bp:hover{background:var(--bm)}
+.bs{background:var(--sr);color:var(--i2);border:1px solid var(--b3)}.bs:hover{background:var(--b2)}
+.bg{background:transparent;color:var(--i3)}
+.bsm{padding:5px 10px;font-size:11px}
+.card{background:var(--sr);border-radius:var(--rlg);border:1px solid var(--b3);box-shadow:var(--sh)}
+/* badges */
+.bdg{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:500}
+.b-g{background:var(--al);color:#15803D}.b-a{background:var(--aml);color:var(--am)}.b-r{background:var(--rl);color:var(--rd)}.b-b{background:var(--bl);color:var(--brand)}.b-p{background:var(--pl);color:var(--pu)}.b-t{background:var(--tt);color:var(--tl)}.b-gr{background:var(--b2);color:var(--i3)}
+/* grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+/* table */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{border-bottom:1px solid var(--b3)}
+th{padding:7px 11px;text-align:left;font-size:10px;font-weight:600;color:var(--i3);letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+td{padding:9px 11px;border-bottom:1px solid var(--b2);color:var(--i2);vertical-align:middle}
+tbody tr:hover{background:var(--bg)}
+tbody tr:last-child td{border-bottom:none}
+.tn{font-weight:500;color:var(--ink)}
+.tm{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--bm)}
+/* forms */
+.fg{margin-bottom:12px}
+.fl{font-size:11px;font-weight:500;color:var(--i2);margin-bottom:4px;display:block}
+.rq{color:var(--rd);margin-left:2px}
+.fi,.fs{width:100%;padding:6px 10px;border:1px solid var(--b3);border-radius:var(--rmd);font-size:12px;font-family:inherit;color:var(--ink);background:var(--sr);outline:none;transition:border .15s}
+.fi:focus,.fs:focus{border-color:var(--bm);box-shadow:0 0 0 3px var(--bl)}
+.fi::placeholder{color:var(--i4)}
+.fh{font-size:10px;color:var(--i4);margin-top:3px}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+/* section heading */
+.sh{font-size:11.5px;font-weight:600;color:var(--ink);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.shl{flex:1;height:1px;background:var(--b3)}
+.dv{height:1px;background:var(--b3);margin:14px 0}
+/* module cards (staff tools) */
+.mc{background:var(--sr);border:1.5px solid var(--b3);border-radius:var(--rlg);padding:15px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column}
+.mc:hover{border-color:var(--bb);box-shadow:var(--shm);transform:translateY(-1px)}
+.mci{width:36px;height:36px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:8px;flex-shrink:0}
+.mct{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.mcd{font-size:11px;color:var(--i3);line-height:1.5}
+.mcw{font-size:9.5px;color:var(--i4);margin-top:8px;text-transform:uppercase;letter-spacing:.4px;font-weight:500;padding-top:8px;border-top:1px solid var(--b2)}
+.mfl{list-style:none;margin-top:7px;flex:1}
+.mfl li{font-size:11px;color:var(--i3);padding:2.5px 0;border-bottom:1px solid var(--b2)}
+.mfl li:last-child{border-bottom:none}
+.mfl li::before{content:"· ";color:var(--i4)}
+/* alert */
+.alt{padding:9px 12px;border-radius:var(--rmd);display:flex;gap:8px;align-items:flex-start;margin-bottom:13px;font-size:12px}
+.aw{background:var(--aml);border:1px solid #FDE68A;color:var(--i2)}
+.ai{background:var(--bl);border:1px solid var(--bb);color:var(--i2)}
+.ag{background:var(--al);border:1px solid #BBF7D0;color:#15803D}
+/* stepper */
+.stepr{display:flex;background:var(--sr);border:1px solid var(--b3);border-radius:var(--rlg);overflow:hidden;margin-bottom:18px}
+.sti{flex:1;padding:10px 5px;text-align:center;border-right:1px solid var(--b3);cursor:pointer;transition:all .15s}
+.sti:last-child{border-right:none}
+.stn{width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:600;margin:0 auto 3px;background:var(--b3);color:var(--i3)}
+.sti.on .stn{background:var(--brand);color:#fff}
+.sti.dn .stn{background:var(--ac);color:#fff}
+.stl{font-size:10px;font-weight:500;color:var(--i3)}
+.sti.on{background:var(--bl)}.sti.on .stl{color:var(--brand)}
+.sti.dn{background:var(--al)}.sti.dn .stl{color:#15803D}
+/* filter */
+.fbar{display:flex;gap:7px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.fin{flex:1;min-width:150px;padding:6px 10px;border:1px solid var(--b3);border-radius:var(--rmd);font-family:inherit;font-size:12px;outline:none}
+.fin:focus{border-color:var(--bm)}
+.fsl{padding:6px 10px;border:1px solid var(--b3);border-radius:var(--rmd);font-family:inherit;font-size:12px;background:white;outline:none}
+/* pip */
+.pipr{display:flex;gap:3px}
+.pip{width:7px;height:7px;border-radius:50%;background:var(--b3)}
+.pip.d{background:var(--ac)}.pip.a{background:var(--am)}
+/* toggle */
+.tog{width:30px;height:16px;border-radius:99px;border:none;background:var(--b3);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.tog::after{content:"";width:10px;height:10px;border-radius:50%;background:white;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tog.on{background:var(--brand)}.tog.on::after{left:17px}
+/* avatar */
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
+/* perm tags */
+.pt{display:inline-flex;align-items:center;font-size:10px;padding:2px 6px;border-radius:99px;background:var(--b2);color:var(--i3);border:1px solid var(--b3)}
+.ptc{background:var(--al);color:#15803D;border-color:#BBF7D0}
+.ptn{background:var(--rl);color:var(--rd);border-color:#FCA5A5;text-decoration:line-through}
+.ptl{background:var(--aml);color:var(--am);border-color:#FDE68A}
+/* progress */
+.pbar{height:4px;background:var(--b3);border-radius:99px;overflow:hidden}
+.pfill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--bm))}
+/* company initial */
+.ci{width:28px;height:28px;border-radius:var(--rsm);background:var(--bl);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+/* role card */
+.rc{background:var(--sr);border:1.5px solid var(--b3);border-radius:var(--rlg);padding:13px;transition:all .15s;cursor:pointer}
+.rc:hover{border-color:var(--bb)}
+.rc.sel{border-color:var(--brand);background:var(--bl)}
+.rci{width:32px;height:32px;border-radius:var(--rmd);display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:7px}
+/* modal */
+.ovl{display:none;position:fixed;inset:0;background:rgba(13,27,42,.52);z-index:100;align-items:flex-start;justify-content:center;padding-top:44px}
+.ovl.show{display:flex}
+.modal{background:var(--sr);border-radius:var(--rlg);width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shm)}
+.mhdr{padding:16px 20px 13px;border-bottom:1px solid var(--b3);display:flex;align-items:center;justify-content:space-between}
+.mhdr h2{font-size:14px;font-weight:600}
+.mbdy{padding:18px 20px}
+.mftr{padding:12px 20px;border-top:1px solid var(--b3);display:flex;justify-content:flex-end;gap:7px}
+.cbtn{background:none;border:none;cursor:pointer;font-size:14px;color:var(--i3);padding:3px}
+/* company left-panel list */
+.cpanel{padding:0;height:fit-content;overflow:hidden}
+.cpanel .csearch{padding:10px 12px;border-bottom:1px solid var(--b3)}
+.citem{padding:8px 12px;border-bottom:1px solid var(--b2);cursor:pointer;transition:background .15s}
+.citem:hover{background:var(--b2)}
+.citem.sel{background:var(--bl);border-left:3px solid var(--brand)}
+.cname{font-size:12px;font-weight:500;color:var(--ink)}
+.cmeta{font-size:10.5px;color:var(--i4)}
+.citem.sel .cname{color:var(--brand)}
+.citem.sel .cmeta{color:var(--bm)}
+</style>
+</head>
+<body>
+<div class="lay">
+
+<!-- SIDEBAR -->
+<aside class="sb">
+  <div class="sbl"><div class="wm">Triliska</div><div class="sub">Programme Backend</div></div>
+  <div class="ss"><div class="sl">General</div>
+    <div class="ni" onclick="go('dashboard')">&#9632; Dashboard</div>
+    <div class="ni on" onclick="go('companies')">&#127968; Companies <span class="nb">3</span></div>
+    <div class="ni" onclick="go('new-company')">&#43; New Company</div>
+    <div class="ni" onclick="go('tax-config')">% Tax Configurations</div>
+    <div class="ni">&#128203; Submissions</div>
+  </div>
+  <div class="ss"><div class="sl">Staff Tools</div>
+    <div class="ni" onclick="go('staff-tools')">&#128193; Staff Portal</div>
+    <div class="ni" onclick="go('product-master')">&#128230; Product Master</div>
+    <div class="ni" onclick="go('inventory')">&#127984; Stores &amp; Inventory</div>
+    <div class="ni" onclick="go('devices')">&#128241; Devices</div>
+    <div class="ni" onclick="go('visits')">&#128221; Visit Logs</div>
+  </div>
+  <div class="ss"><div class="sl">People</div>
+    <div class="ni" onclick="go('accounts')">&#128101; Accounts &amp; Staff</div>
+    <div class="ni" onclick="go('roles')">&#128274; Roles &amp; Permissions</div>
+  </div>
+  <div class="ss"><div class="sl">Support</div>
+    <div class="ni">&#128218; Audit Logs</div>
+    <div class="ni">&#63; Help</div>
+  </div>
+  <div class="sbot">
+    <div class="uc">
+      <div class="ua">RN</div>
+      <div><div class="un">Robert Nettey</div><span class="ur">Programme Admin</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="tabs">
+    <div class="tab on" onclick="goT(this,'companies')">Companies</div>
+    <div class="tab" onclick="goT(this,'new-company')">New Company</div>
+    <div class="tab" onclick="goT(this,'dashboard')">Dashboard</div>
+    <div class="tab" onclick="goT(this,'tax-config')">Tax Config</div>
+    <div class="tab" onclick="goT(this,'staff-tools')">Staff Tools Hub</div>
+    <div class="tab" onclick="goT(this,'product-master')">Product Master</div>
+    <div class="tab" onclick="goT(this,'inventory')">Stores &amp; Inventory</div>
+    <div class="tab" onclick="goT(this,'devices')">Devices</div>
+    <div class="tab" onclick="goT(this,'visits')">Visit Logs</div>
+    <div class="tab" onclick="goT(this,'accounts')">Accounts &amp; Staff</div>
+    <div class="tab" onclick="goT(this,'roles')">Roles &amp; Permissions</div>
+  </div>
+  <div class="topbar">
+    <div class="bc"><span>Programme</span><span style="color:var(--b3)">&#8250;</span><span class="cur" id="ttl">Companies</span></div>
+    <div class="tbr">
+      <div class="ibtn"><div class="dot"></div>&#128276;</div>
+      <div style="display:flex;align-items:center;gap:7px;padding:4px 10px;background:var(--b2);border-radius:var(--rmd);cursor:pointer">
+        <div class="av" style="width:22px;height:22px;font-size:8.5px;background:linear-gradient(135deg,var(--brand),var(--bm));color:#fff">RN</div>
+        <div><div style="font-size:11px;font-weight:600">Robert Nettey</div><div style="font-size:9.5px;color:var(--i4)">Programme Admin</div></div>
+        <span style="font-size:9px;color:var(--i4)">&#9660;</span>
+      </div>
+    </div>
+  </div>
+  <div class="cnt">
+
+<!-- ====== COMPANIES ====== -->
+<div class="scr v" id="scr-companies">
+<div class="ph"><div><h1>Companies</h1><p>All registered MSMEs — onboarding pipeline and compliance status at a glance</p></div><div style="display:flex;gap:7px"><button class="btn bs bsm">&#8679; Upload CSV</button><button class="btn bp bsm" onclick="go('new-company')">+ New Company</button></div></div>
+<div class="fbar"><input class="fin" placeholder="&#128269; Search company, TIN, programme ref…"><select class="fsl"><option>All Statuses</option><option>Active</option></select><select class="fsl"><option>All Districts</option><option>Accra Metro</option><option>Asunafo South</option></select><select class="fsl"><option>All Zones</option><option>Zone 1</option><option>Zone 2</option></select><select class="fsl"><option>All Sectors</option><option>Food Retail</option><option>Pharmaceutical</option></select></div>
+<div class="card"><div class="tw"><table>
+<thead><tr><th>Company</th><th>Programme Ref / TIN</th><th>Sector</th><th>District / Zone</th><th>Onboarding</th><th>Compliance</th><th>Staff</th><th></th></tr></thead>
+<tbody>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="ci">GS</div><div><div class="tn">Grace Store Yasuo 1</div><div class="tm">TRL-ACC-001</div></div></div></td><td><span class="tm">TRL-ACC-001</span></td><td><span class="bdg b-b">Food</span></td><td style="font-size:11.5px;color:var(--i3)">Accra Met / Zone 1</td><td><div><div class="pipr"><div class="pip d"></div><div class="pip d"></div><div class="pip d"></div><div class="pip d"></div><div class="pip a"></div><div class="pip"></div></div><div style="font-size:10px;color:var(--am);margin-top:2px">4/6 — device pending</div></div></td><td><span style="font-size:11px;font-weight:500;color:var(--am)">&#9679; Device pending</span></td><td><div style="display:flex;align-items:center;gap:5px"><div class="av" style="width:22px;height:22px;font-size:8.5px;background:var(--pl);color:var(--pu)">KA</div><span style="font-size:11.5px">Kwame A.</span></div></td><td><button class="btn bs bsm">View &#8250;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="ci" style="background:var(--tt);color:var(--tl)">PW</div><div><div class="tn">Phuoc Warehouse Test</div><div class="tm">TRL-ASU-4564</div></div></div></td><td><span class="tm">GRA-TIN-P8337473747</span></td><td><span class="bdg b-t">General</span></td><td style="font-size:11.5px;color:var(--i3)">Asunafo South</td><td><div><div class="pipr"><div class="pip d"></div><div class="pip d"></div><div class="pip d"></div><div class="pip d"></div><div class="pip d"></div><div class="pip d"></div></div><div style="font-size:10px;color:var(--ac);margin-top:2px">6/6 — complete &#10003;</div></div></td><td><span style="font-size:11px;font-weight:500;color:var(--ac)">&#9679; Sales active</span></td><td><div style="display:flex;align-items:center;gap:5px"><div class="av" style="width:22px;height:22px;font-size:8.5px;background:var(--aml);color:var(--am)">EO</div><span style="font-size:11.5px">Esi O.</span></div></td><td><button class="btn bs bsm">View &#8250;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="ci" style="background:var(--rl);color:var(--rd)">JC</div><div><div class="tn">Jul Company</div><div class="tm">TRL-KWA-9489</div></div></div></td><td><span class="tm">GRA-TIN-P1444876890</span></td><td><span class="bdg b-gr">Services</span></td><td style="font-size:11.5px;color:var(--i3)">Kwabre East</td><td><div><div class="pipr"><div class="pip d"></div><div class="pip a"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div><div style="font-size:10px;color:var(--am);margin-top:2px">1/6 — profile incomplete</div></div></td><td><span style="font-size:11px;font-weight:500;color:var(--i4)">&#9679; Not started</span></td><td><span style="font-size:11px;color:var(--i4)">Unassigned</span></td><td><button class="btn bs bsm">View &#8250;</button></td></tr>
+</tbody>
+</table></div>
+<div style="padding:9px 14px;border-top:1px solid var(--b2);display:flex;align-items:center;justify-content:space-between"><span style="font-size:11.5px;color:var(--i3)">3 of 47 companies</span><div style="display:flex;gap:5px"><button class="btn bs bsm">&#8592; Prev</button><button class="btn bs bsm">Next &#8594;</button></div></div>
+</div>
+</div>
+
+<!-- ====== NEW COMPANY ====== -->
+<div class="scr" id="scr-new-company">
+<div class="ph"><div><h1>Register New Company</h1><p>Complete 5 steps to register the MSME and auto-generate a Programme Reference Number</p></div></div>
+<div class="stepr">
+  <div class="sti on"><div class="stn">1</div><div class="stl">&#127968; Business</div></div>
+  <div class="sti"><div class="stn">2</div><div class="stl">&#128100; Owner</div></div>
+  <div class="sti"><div class="stn">3</div><div class="stl">&#129534; Tax</div></div>
+  <div class="sti"><div class="stn">4</div><div class="stl">&#128101; Assignment</div></div>
+  <div class="sti"><div class="stn">5</div><div class="stl">&#10003; Review</div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 280px;gap:14px">
+<div class="card" style="padding:20px">
+  <div class="sh">&#127968; Business Information <div class="shl"></div></div>
+  <div class="fg"><label class="fl">Business name <span class="rq">*</span></label><input class="fi" placeholder="Registered business name"></div>
+  <div class="fr"><div class="fg"><label class="fl">Business type <span class="rq">*</span></label><select class="fs"><option>Sole proprietor</option><option>Partnership</option><option>Limited company</option></select></div><div class="fg"><label class="fl">Sector <span class="rq">*</span></label><select class="fs"><option value="">Select sector…</option><option>Food &amp; Beverages</option><option>General Merchandise</option><option>Pharmaceutical / Chemist</option><option>Services</option><option>Manufacturing</option></select><div class="fh">Pharmaceutical sector auto-enables product expiry date tracking</div></div></div>
+  <div class="fg"><label class="fl">Business address <span class="rq">*</span></label><input class="fi" placeholder="Stall/shop number, market name, area (e.g. Stall 14B, Makola Market, Accra)"></div>
+  <div class="fr"><div class="fg"><label class="fl">District <span class="rq">*</span></label><select class="fs"><option value="">Select district…</option><option>Accra Metropolitan</option><option>Tema Metropolitan</option><option>Kumasi Metropolitan</option></select></div><div class="fg"><label class="fl">Zone</label><select class="fs"><option value="">Select zone…</option><option>Zone 1 — Makola</option><option>Zone 2 — Kantamanto</option></select></div></div>
+  <div class="fg"><label class="fl">GPS Location <span class="rq">*</span></label><div style="display:flex;gap:7px;align-items:flex-end"><input class="fi" placeholder="Latitude" style="font-family:'DM Mono',monospace"><input class="fi" placeholder="Longitude" style="font-family:'DM Mono',monospace"><button class="btn bs bsm" style="white-space:nowrap;flex-shrink:0">&#128205; Capture GPS</button></div><div class="fh">GPS required for market mapping and zone assignment. Click to auto-fill from this device.</div></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:14px;border-top:1px solid var(--b3)"><button class="btn bg bsm">Cancel</button><div style="display:flex;gap:7px"><button class="btn bs bsm" disabled>&#8592; Back</button><button class="btn bp bsm">Next: Owner Info &#8594;</button></div></div>
+</div>
+<div><div class="card" style="padding:14px;margin-bottom:10px"><div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:6px">Step 1 of 5</div><div class="pbar" style="margin-bottom:5px"><div class="pfill" style="width:20%"></div></div><div style="font-size:10.5px;color:var(--i3);display:flex;justify-content:space-between;margin-bottom:11px"><span>Business Info</span><span>20%</span></div><div class="dv"></div><div style="font-size:11.5px;color:var(--i3);line-height:1.8"><strong style="color:var(--ink);display:block;margin-bottom:4px">After registration:</strong>Load products via CSV, set up stores, link the Sunmi device. Programme Reference Number is auto-generated on completion.</div></div><div class="card" style="padding:13px"><div style="font-size:10px;font-weight:600;color:var(--i3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px">Required for GRA Filing</div><div style="font-size:11.5px;color:var(--i2);line-height:2">&#10003; Business name<br>&#10003; Sector<br>&#10003; Business type<br>&#10003; GPS coordinates<br>&#10003; District / Zone<br>&#10003; Owner Ghana Card (Step 2)<br>&#10003; TIN (Step 3)</div></div></div>
+</div>
+</div>
+
+<!-- ====== DASHBOARD ====== -->
+<div class="scr" id="scr-dashboard">
+<div class="ph"><div><h1>Dashboard</h1><p>Programme overview — all values in GH&#8373;</p></div></div>
+<div class="alt aw">&#9888;&#65039; <span><strong style="display:block;margin-bottom:2px">Portal showing SGD — must be changed to GH&#8373; (Ghana Cedis)</strong>All monetary values must display in GHS. Flagged to Vietnam team as a critical fix before pilot.</span></div>
+<div class="g4" style="margin-bottom:14px">
+<div class="card" style="padding:13px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Total Companies</div><div style="font-size:21px;font-weight:600;letter-spacing:-.5px">47</div><div style="font-size:10.5px;color:var(--ac);margin-top:2px">&#8593; 12 this month</div></div>
+<div class="card" style="padding:13px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Fully Onboarded</div><div style="font-size:21px;font-weight:600;letter-spacing:-.5px">28</div><div style="font-size:10.5px;color:var(--i4);margin-top:2px">59% of registered</div></div>
+<div class="card" style="padding:13px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Tax Collected (GH&#8373;)</div><div style="font-size:21px;font-weight:600;letter-spacing:-.5px">GH&#8373;12,840</div><div style="font-size:10.5px;color:var(--ac);margin-top:2px">&#8593; GH&#8373;2,100 vs last month</div></div>
+<div class="card" style="padding:13px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Pending Submissions</div><div style="font-size:21px;font-weight:600;letter-spacing:-.5px">9</div><div style="font-size:10.5px;color:var(--rd);margin-top:2px">3 overdue</div></div>
+</div>
+<div class="card" style="padding:16px"><div class="sh">Onboarding Pipeline <div class="shl"></div></div><div style="display:flex;background:var(--b2);border-radius:var(--rmd);overflow:hidden"><div style="flex:47;background:var(--bl);padding:10px;text-align:center"><div style="font-size:19px;font-weight:700;color:var(--brand)">47</div><div style="font-size:9.5px;color:var(--brand)">Registered</div></div><div style="display:flex;align-items:center;padding:0 5px;color:var(--i4)">&#8250;</div><div style="flex:39;padding:10px;text-align:center"><div style="font-size:19px;font-weight:700">39</div><div style="font-size:9.5px;color:var(--i3)">Products Loaded</div></div><div style="display:flex;align-items:center;padding:0 5px;color:var(--i4)">&#8250;</div><div style="flex:34;padding:10px;text-align:center"><div style="font-size:19px;font-weight:700">34</div><div style="font-size:9.5px;color:var(--i3)">Device Linked</div></div><div style="display:flex;align-items:center;padding:0 5px;color:var(--i4)">&#8250;</div><div style="flex:28;background:var(--al);padding:10px;text-align:center"><div style="font-size:19px;font-weight:700;color:var(--ac)">28</div><div style="font-size:9.5px;color:#15803D">First Sale &#10003;</div></div></div></div>
+</div>
+
+<!-- ====== TAX CONFIG ====== -->
+<div class="scr" id="scr-tax-config">
+<div class="ph"><div><h1>Tax Configurations</h1><p>Apply templates in bulk — no more configuring one company at a time</p></div><button class="btn bp bsm">+ Create Template</button></div>
+<div style="background:linear-gradient(135deg,var(--brand),#1565A8);border-radius:var(--rlg);padding:17px 20px;color:white;margin-bottom:15px"><div style="font-size:13.5px;font-weight:600;margin-bottom:3px">Apply a Tax Template to Multiple Companies</div><div style="font-size:11.5px;opacity:.7;margin-bottom:10px">Select template &#8594; choose companies, district, or all &#8594; apply in one click</div><div style="display:flex;gap:7px"><button class="btn" style="background:white;color:var(--brand);font-size:11px">&#9889; Apply in Bulk</button><button class="btn" style="background:rgba(255,255,255,.12);color:white;border:1px solid rgba(255,255,255,.25);font-size:11px">View Applied</button></div></div>
+<div class="g3" style="margin-bottom:14px">
+<div class="card" style="padding:13px;border:2px solid var(--brand);background:var(--bl)"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span class="bdg b-b">Standard Rate</span><span style="font-size:9.5px;color:var(--i4)">Registered VAT</span></div><div style="font-size:13px;font-weight:600;margin-bottom:3px">MTS Standard Rate</div><div style="font-size:11px;color:var(--i3);margin-bottom:8px">Full VAT regime — all levies on VAT-exclusive base</div><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="bdg b-b">VAT 15%</span><span class="bdg b-b">NHIL 2.5%</span><span class="bdg b-b">GETFund 2.5%</span><span class="bdg b-b">COVID 1%</span><span class="bdg b-g">Total: 21%</span></div></div>
+<div class="card" style="padding:13px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span class="bdg b-a">Flat Rate</span><span style="font-size:9.5px;color:var(--i4)">Informal sector</span></div><div style="font-size:13px;font-weight:600;margin-bottom:3px">VAT Flat Rate Scheme</div><div style="font-size:11px;color:var(--i3);margin-bottom:8px">3% flat rate on gross sales — no levies, no input credit</div><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="bdg b-a">Flat Rate 3%</span><span class="bdg b-gr">On gross sales</span></div></div>
+<div class="card" style="padding:13px"><div style="display:flex;justify-content:space-between;margin-bottom:6px"><span class="bdg b-gr">Exempt</span><span style="font-size:9.5px;color:var(--i4)">No VAT collected</span></div><div style="font-size:13px;font-weight:600;margin-bottom:3px">Tax Exempt</div><div style="font-size:11px;color:var(--i3);margin-bottom:8px">VAT-exempt goods/services — income tax still applies</div><div style="display:flex;flex-wrap:wrap;gap:4px"><span class="bdg b-gr">0% VAT</span><span class="bdg b-gr">Income tax only</span></div></div>
+</div>
+<div class="card" style="padding:15px"><div class="sh">Bulk Apply: MTS Standard Rate <div class="shl"></div><span style="font-size:10.5px;font-weight:400;color:var(--i3)">Template selected above</span></div><div style="background:var(--b2);border-radius:var(--rmd);padding:11px;margin-bottom:11px"><div style="font-size:11.5px;font-weight:500;margin-bottom:8px">Apply to:</div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:9px"><label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="radio" name="sc"> All (47)</label><label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="radio" name="sc" checked> Selected</label><label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer"><input type="radio" name="sc"> By district</label></div><div style="display:flex;gap:5px;flex-wrap:wrap"><span class="bdg b-b" style="cursor:pointer">Grace Store &#10005;</span><span class="bdg b-b" style="cursor:pointer">Phuoc Warehouse &#10005;</span><button class="btn bs bsm">+ Add companies</button></div></div><div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap"><span style="font-size:11.5px;color:var(--i3)">2 companies selected — MTS Standard Rate (21%) will be applied</span><button class="btn bp bsm">&#9889; Apply to 2 Companies</button></div></div>
+</div>
+
+<!-- ====== STAFF TOOLS HUB ====== -->
+<div class="scr" id="scr-staff-tools">
+<div class="ph"><div><h1>Staff Portal</h1><p>All tools for programme staff to set up MSMEs from a desktop — before handing the POS device to the trader</p></div></div>
+<div class="alt ai">&#8505;&#65039; Pre-loading products, stock, and stores from the web portal means the trader&#39;s POS is ready to use on day one. Much faster than entering everything on a Sunmi 5.99" screen.</div>
+<div class="g4">
+<div class="mc" onclick="go('product-master')"><div class="mci" style="background:#EEF2FF">&#128230;</div><div class="mct">Product Master</div><div class="mcd">Create and manage product catalogues per MSME. CSV bulk import with validation.</div><ul class="mfl"><li>Create / edit products per MSME</li><li>SKU, barcode, price, cost, tax flag</li><li>Product category &amp; unit of measure</li><li>Expiry date (pharmaceutical sector)</li><li>CSV bulk import with error report</li><li>Download product template CSV</li><li>Deactivate / archive products</li></ul><div class="mcw">Programme Staff, Admin</div></div>
+<div class="mc" onclick="go('inventory')"><div class="mci" style="background:#E6FFF5">&#127984;</div><div class="mct">Stores &amp; Warehouses</div><div class="mcd">Create named store locations, set default POS store, manage stock and transfers.</div><ul class="mfl"><li>Create named stores per MSME</li><li>Set default store for POS</li><li>View stock levels per store</li><li>Record inter-store transfers</li><li>Mark stores active / inactive</li></ul><div class="mcw">Programme Staff, Admin</div></div>
+<div class="mc"><div class="mci" style="background:#FEF3C7">&#128202;</div><div class="mct">Opening Stock Setup</div><div class="mcd">CSV bulk import of opening stock per MSME. Manual entry and error reporting.</div><ul class="mfl"><li>CSV bulk opening stock import</li><li>Manual single-product entry</li><li>Assign opening stock to specific store</li><li>Download stock template CSV</li><li>View import history &amp; errors</li></ul><div class="mcw">Programme Staff, Admin</div></div>
+<div class="mc"><div class="mci" style="background:#E6F8ED">&#9989;</div><div class="mct">Onboarding Checklist</div><div class="mcd">Per-MSME step tracker from registration to first live sale.</div><ul class="mfl"><li>Per-MSME progress tracker (% complete)</li><li>Steps: Registered &#8594; Profile &#8594; Products &#8594; Stock &#8594; Device &#8594; First Sale</li><li>Staff marks steps complete with notes</li><li>Flag blocked items needing follow-up</li></ul><div class="mcw">Staff, Supervisors, Admin</div></div>
+<div class="mc" onclick="go('devices')"><div class="mci" style="background:#FEE2E2">&#128241;</div><div class="mct">Device Management</div><div class="mcd">Link Sunmi devices to MSMEs, monitor sync health, troubleshoot connectivity.</div><ul class="mfl"><li>Link Sunmi serial number to MSME</li><li>View last sync timestamp per device</li><li>View online / offline status</li><li>Unlink / reassign device</li><li>Force sync trigger (admin only)</li></ul><div class="mcw">Programme Staff, Admin</div></div>
+<div class="mc" onclick="go('visits')"><div class="mci" style="background:#FDF4FF">&#128221;</div><div class="mct">Visit Log &amp; Field Notes</div><div class="mcd">NSA staff log MSME visits, training delivered, and escalations for supervisors.</div><ul class="mfl"><li>Log visits: date, duration, purpose</li><li>Record training given (POS, tax, products)</li><li>Flag issues needing supervisor escalation</li><li>Photo attachment (optional)</li><li>Visible to supervisor and admin</li></ul><div class="mcw">Programme Staff &#8594; Supervisors, Admin</div></div>
+<div class="mc"><div class="mci" style="background:#F1F5F9">&#128193;</div><div class="mct">Categories &amp; Units Setup</div><div class="mcd">Product categories and units of measure — global templates and sector presets.</div><ul class="mfl"><li>Create categories per MSME or global</li><li>Units: piece, kg, box, litre, etc.</li><li>Sector-specific presets (pharma, food…)</li><li>Global templates staff can apply to any MSME</li></ul><div class="mcw">Programme Staff, Admin</div></div>
+<div class="mc"><div class="mci" style="background:#EDE9FE">&#128200;</div><div class="mct">Staff Performance</div><div class="mcd">Supervisors see team progress — MSMEs onboarded, visits, escalations.</div><ul class="mfl"><li>MSMEs assigned vs onboarded (%)</li><li>Products loaded this week / month</li><li>Visits logged this week</li><li>Escalations pending</li><li>Scoped to supervisor&#39;s own team</li></ul><div class="mcw">Programme Supervisors, Admin</div></div>
+</div>
+</div>
+
+<!-- ====== PRODUCT MASTER ====== -->
+<div class="scr" id="scr-product-master">
+<div class="ph"><div><h1>Product Master</h1><p>Manage product catalogues per MSME — select a company to view or edit its products</p></div><div style="display:flex;gap:7px"><button class="btn bs bsm">&#8681; Template CSV</button><button class="btn bs bsm">&#8679; CSV Import</button><button class="btn bp bsm">+ New Product</button></div></div>
+<div style="display:grid;grid-template-columns:200px 1fr;gap:13px">
+<div class="card cpanel"><div class="csearch"><input class="fin" placeholder="&#128269; Search companies…" style="width:100%"></div>
+<div class="citem sel"><div class="cname">Grace Store Yasuo 1</div><div class="cmeta">24 products</div></div>
+<div class="citem"><div class="cname">Phuoc Warehouse Test</div><div class="cmeta">31 products</div></div>
+<div class="citem"><div class="cname" style="color:var(--rd)">Jul Company</div><div class="cmeta" style="color:var(--rd)">0 products — needs setup</div></div>
+<div class="citem"><div class="cname">Sakura Coffee</div><div class="cmeta">18 products</div></div>
+</div>
+<div><div style="display:flex;gap:7px;margin-bottom:11px"><input class="fin" placeholder="&#128269; Search by name, SKU, barcode…"><select class="fsl"><option>All Categories</option><option>Beverages</option><option>Food</option></select><select class="fsl"><option>All Tax Status</option><option>Taxable</option><option>Exempt</option></select></div>
+<div class="card"><div class="tw"><table>
+<thead><tr><th>Product</th><th>SKU</th><th>Category</th><th>Sell Price (GH&#8373;)</th><th>Cost (GH&#8373;)</th><th>Tax</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+<tbody>
+<tr><td><div class="tn">Coca Cola 50cl</div></td><td><span class="tm">SKU-001</span></td><td><span class="bdg b-b">Beverages</span></td><td style="font-weight:500">GH&#8373;5.00</td><td style="color:var(--i3)">GH&#8373;3.50</td><td><span class="bdg b-b">Standard 21%</span></td><td><span class="bdg b-g">48 units</span></td><td><span class="bdg b-g">Active</span></td><td><button class="btn bg bsm">Edit</button></td></tr>
+<tr><td><div class="tn">Indomie Noodles</div></td><td><span class="tm">SKU-002</span></td><td><span class="bdg b-a">Food</span></td><td style="font-weight:500">GH&#8373;3.50</td><td style="color:var(--i3)">GH&#8373;2.20</td><td><span class="bdg b-b">Standard 21%</span></td><td><span class="bdg b-a">4 units &#9888;</span></td><td><span class="bdg b-g">Active</span></td><td><button class="btn bg bsm">Edit</button></td></tr>
+<tr><td><div class="tn">Paracetamol 500mg</div><div style="font-size:10px;color:var(--i4)">Expires: Aug 2027</div></td><td><span class="tm">SKU-003</span></td><td><span class="bdg b-t">Pharma</span></td><td style="font-weight:500">GH&#8373;2.00</td><td style="color:var(--i3)">GH&#8373;1.20</td><td><span class="bdg b-gr">Exempt</span></td><td><span class="bdg b-g">120 units</span></td><td><span class="bdg b-g">Active</span></td><td><button class="btn bg bsm">Edit</button></td></tr>
+</tbody>
+</table></div><div style="padding:9px 13px;border-top:1px solid var(--b2);font-size:11.5px;color:var(--i3)">3 of 24 products — Grace Store Yasuo 1</div></div></div>
+</div>
+</div>
+
+<!-- ====== STORES & INVENTORY ====== -->
+<div class="scr" id="scr-inventory">
+<div class="ph"><div><h1>Stores &amp; Inventory</h1><p>Manage warehouse locations and stock levels across all MSMEs</p></div><button class="btn bp bsm">+ New Store</button></div>
+<div style="display:grid;grid-template-columns:200px 1fr;gap:13px">
+<div class="card cpanel"><div class="csearch"><input class="fin" placeholder="&#128269; Search…" style="width:100%"></div><div class="citem sel"><div class="cname">Grace Store Yasuo 1</div><div class="cmeta">2 stores</div></div><div class="citem"><div class="cname">Phuoc Warehouse Test</div><div class="cmeta">1 store</div></div></div>
+<div>
+<div class="g2" style="margin-bottom:12px">
+<div class="card" style="padding:13px;border:1.5px solid var(--brand);background:var(--bl)"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="font-size:12.5px;font-weight:600;color:var(--brand)">Main Store — Makola</div><div style="font-size:10.5px;color:var(--bm);margin-top:2px">Default POS Store &#9733;</div></div><span class="bdg b-g">Active</span></div><div style="font-size:11px;color:var(--i3)">24 product lines &middot; Last sync: 10 mins ago</div><div style="display:flex;gap:5px;margin-top:8px"><button class="btn bs bsm">View Stock</button><button class="btn bs bsm">Transfer</button></div></div>
+<div class="card" style="padding:13px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px"><div><div style="font-size:12.5px;font-weight:600">Backroom Warehouse</div><div style="font-size:10.5px;color:var(--i4);margin-top:2px">Secondary storage</div></div><span class="bdg b-g">Active</span></div><div style="font-size:11px;color:var(--i3)">24 product lines &middot; Last sync: 2 hrs ago</div><div style="display:flex;gap:5px;margin-top:8px"><button class="btn bs bsm">View Stock</button><button class="btn bs bsm">Transfer</button></div></div>
+</div>
+<div class="card"><div style="padding:11px 13px;border-bottom:1px solid var(--b3);display:flex;align-items:center;justify-content:space-between"><div style="font-size:12px;font-weight:600">Stock Levels — Main Store</div><div style="display:flex;gap:6px"><button class="btn bs bsm">&#8679; Import Opening Stock</button><button class="btn bs bsm">Record Movement</button></div></div>
+<div class="tw"><table><thead><tr><th>Product</th><th>Main Store</th><th>Backroom</th><th>Low-Stock Threshold</th><th>Status</th><th></th></tr></thead><tbody>
+<tr><td class="tn">Coca Cola 50cl</td><td style="font-weight:500">48 units</td><td>120 units</td><td>10 units</td><td><span class="bdg b-g">OK</span></td><td><button class="btn bg bsm">Adjust</button></td></tr>
+<tr><td class="tn">Indomie Noodles</td><td style="font-weight:500;color:var(--am)">4 units &#9888;</td><td>0 units</td><td>15 units</td><td><span class="bdg b-a">Low Stock</span></td><td><button class="btn bg bsm">Restock</button></td></tr>
+<tr><td class="tn">Paracetamol 500mg</td><td style="font-weight:500">120 units</td><td>80 units</td><td>20 units</td><td><span class="bdg b-g">OK</span></td><td><button class="btn bg bsm">Adjust</button></td></tr>
+</tbody></table></div></div>
+</div>
+</div>
+</div>
+
+<!-- ====== DEVICES ====== -->
+<div class="scr" id="scr-devices">
+<div class="ph"><div><h1>Device Management</h1><p>Link Sunmi devices to MSMEs and monitor sync health in real time</p></div><button class="btn bp bsm">+ Link Device</button></div>
+<div class="g4" style="margin-bottom:13px">
+<div class="card" style="padding:12px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Total Devices</div><div style="font-size:20px;font-weight:600">34</div></div>
+<div class="card" style="padding:12px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Online Now</div><div style="font-size:20px;font-weight:600;color:var(--ac)">22</div></div>
+<div class="card" style="padding:12px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Offline &gt; 24hrs</div><div style="font-size:20px;font-weight:600;color:var(--am)">5</div></div>
+<div class="card" style="padding:12px"><div style="font-size:10.5px;color:var(--i3);margin-bottom:2px">Unlinked</div><div style="font-size:20px;font-weight:600;color:var(--rd)">3</div></div>
+</div>
+<div class="card"><div style="padding:10px 13px;border-bottom:1px solid var(--b3)"><input class="fin" placeholder="&#128269; Search by serial number or company…" style="max-width:320px"></div>
+<div class="tw"><table><thead><tr><th>Device Serial</th><th>Model</th><th>Linked Company</th><th>Last Sync</th><th>Status</th><th>Staff</th><th></th></tr></thead><tbody>
+<tr><td><span class="tm">SM-V3P-00142</span></td><td style="font-size:11px">Sunmi V3 PLUS</td><td class="tn">Grace Store Yasuo 1</td><td style="font-size:11px;color:var(--i4)">10 mins ago</td><td><span class="bdg b-g">&#9679; Online</span></td><td style="font-size:11.5px">Kwame Asante</td><td><button class="btn bg bsm">Manage</button></td></tr>
+<tr><td><span class="tm">SM-V2P-00089</span></td><td style="font-size:11px">Sunmi V2 PRO</td><td class="tn">Phuoc Warehouse</td><td style="font-size:11px;color:var(--i4)">2 hrs ago</td><td><span class="bdg b-g">&#9679; Online</span></td><td style="font-size:11.5px">Esi Owusu</td><td><button class="btn bg bsm">Manage</button></td></tr>
+<tr><td><span class="tm">SM-V3P-00167</span></td><td style="font-size:11px">Sunmi V3 PLUS</td><td class="tn">Sakura Coffee</td><td style="font-size:11px;color:var(--am)">2 days ago &#9888;</td><td><span class="bdg b-a">&#9679; Offline</span></td><td style="font-size:11.5px">—</td><td><button class="btn bp bsm">Force Sync</button></td></tr>
+<tr><td><span class="tm">SM-V3P-00201</span></td><td style="font-size:11px">Sunmi V3 PLUS</td><td style="color:var(--i4)">Unlinked</td><td style="font-size:11px;color:var(--i4)">—</td><td><span class="bdg b-gr">Unlinked</span></td><td style="font-size:11.5px">—</td><td><button class="btn bs bsm">Link to Company</button></td></tr>
+</tbody></table></div></div>
+</div>
+
+<!-- ====== VISIT LOGS ====== -->
+<div class="scr" id="scr-visits">
+<div class="ph"><div><h1>Visit Logs &amp; Field Notes</h1><p>NSA staff field activity — visits, training delivered, and escalation flags</p></div><button class="btn bp bsm">+ Log Visit</button></div>
+<div class="fbar"><input class="fin" placeholder="&#128269; Search by company or staff name…"><select class="fsl"><option>All Staff</option><option>Kwame Asante</option><option>Esi Owusu</option></select><select class="fsl"><option>All Statuses</option><option>Completed</option><option>Escalated</option></select><select class="fsl"><option>This Week</option><option>This Month</option></select></div>
+<div class="card"><div class="tw"><table><thead><tr><th>Company</th><th>Staff</th><th>Date</th><th>Purpose</th><th>Training Given</th><th>Status</th><th></th></tr></thead><tbody>
+<tr><td class="tn">Grace Store Yasuo 1</td><td><div style="display:flex;align-items:center;gap:5px"><div class="av" style="width:20px;height:20px;font-size:8px;background:var(--pl);color:var(--pu)">KA</div>Kwame Asante</div></td><td style="font-size:11.5px">Apr 15, 2026</td><td style="font-size:11.5px">Product loading + POS setup</td><td><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="bdg b-b">POS</span><span class="bdg b-t">Products</span></div></td><td><span class="bdg b-g">Completed</span></td><td><button class="btn bg bsm">View</button></td></tr>
+<tr><td class="tn">Phuoc Warehouse</td><td><div style="display:flex;align-items:center;gap:5px"><div class="av" style="width:20px;height:20px;font-size:8px;background:var(--aml);color:var(--am)">EO</div>Esi Owusu</div></td><td style="font-size:11.5px">Apr 14, 2026</td><td style="font-size:11.5px">Monthly review + tax explanation</td><td><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="bdg b-a">Tax filing</span><span class="bdg b-b">Reports</span></div></td><td><span class="bdg b-g">Completed</span></td><td><button class="btn bg bsm">View</button></td></tr>
+<tr><td class="tn">Jul Company</td><td><div style="display:flex;align-items:center;gap:5px"><div class="av" style="width:20px;height:20px;font-size:8px;background:var(--al);color:var(--tl)">AB</div>Abena Boateng</div></td><td style="font-size:11.5px">Apr 13, 2026</td><td style="font-size:11.5px">Initial onboarding — owner absent</td><td style="font-size:11.5px;color:var(--i4)">None — owner not available</td><td><span class="bdg b-r">Escalated &#9873;</span></td><td><button class="btn bg bsm">View</button></td></tr>
+</tbody></table></div></div>
+</div>
+
+<!-- ====== ACCOUNTS & STAFF ====== -->
+<div class="scr" id="scr-accounts">
+<div class="ph"><div><h1>Accounts &amp; Staff</h1><p>All user accounts across all roles — create, assign, and manage access</p></div><button class="btn bp bsm" onclick="document.getElementById('mcr').classList.add('show')">+ Create Account</button></div>
+<!-- Summary strip -->
+<div class="g4" style="margin-bottom:15px">
+<div class="card" style="padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer"><div style="font-size:18px">&#128101;</div><div><div style="font-size:18px;font-weight:600">47</div><div style="font-size:10.5px;color:var(--i3)">Total Accounts</div></div></div>
+<div class="card" style="padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer"><div style="font-size:18px">&#127963;</div><div><div style="font-size:18px;font-weight:600">18</div><div style="font-size:10.5px;color:var(--i3)">Programme Staff</div></div></div>
+<div class="card" style="padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer"><div style="font-size:18px">&#128188;</div><div><div style="font-size:18px;font-weight:600">24</div><div style="font-size:10.5px;color:var(--i3)">Business Accounts</div></div></div>
+<div class="card" style="padding:12px;display:flex;align-items:center;gap:8px;cursor:pointer"><div style="font-size:18px">&#127963;&#65039;</div><div><div style="font-size:18px;font-weight:600">5</div><div style="font-size:10.5px;color:var(--i3)">GRA Officers</div></div></div>
+</div>
+<!-- Tab filters -->
+<div style="display:flex;gap:0;border-bottom:2px solid var(--b3);margin-bottom:12px">
+<button class="btn bg" style="border-bottom:2px solid var(--brand);margin-bottom:-2px;color:var(--brand);border-radius:0;padding:6px 14px;font-weight:600;font-size:12px">All Accounts</button>
+<button class="btn bg" style="border-radius:0;padding:6px 14px;color:var(--i3);font-size:12px">Programme</button>
+<button class="btn bg" style="border-radius:0;padding:6px 14px;color:var(--i3);font-size:12px">Business</button>
+<button class="btn bg" style="border-radius:0;padding:6px 14px;color:var(--i3);font-size:12px">GRA</button>
+</div>
+<div class="fbar"><input class="fin" placeholder="&#128269; Search by name, username, phone, national ID…"><select class="fsl"><option>All Roles</option><option>Programme Admin</option><option>Programme Supervisor</option><option>Programme Staff (NSP)</option><option>Business Owner</option><option>Business Power User</option><option>Business Staff / Cashier</option><option>GRA Officer</option></select><select class="fsl"><option>All Statuses</option><option>Active</option><option>Inactive</option></select><select class="fsl"><option>All Districts</option><option>Accra Metropolitan</option><option>Kumasi</option></select></div>
+<div class="card"><div class="tw"><table>
+<thead><tr><th>User</th><th>Role</th><th>Company / Zone</th><th>Phone</th><th>National ID</th><th>District</th><th>Status</th><th>Created</th><th></th></tr></thead>
+<tbody>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:28px;height:28px;font-size:9.5px;background:linear-gradient(135deg,var(--brand),var(--bm));color:#fff">RN</div><div><div class="tn">Robert Nettey</div><div style="font-size:10px;color:var(--i4)">@rnettey</div></div></div></td><td><span class="bdg b-b">&#128081; Programme Admin</span></td><td style="font-size:11.5px;color:var(--i3)">All companies</td><td style="font-size:11.5px">+233 244 226 744</td><td style="font-size:10.5px;color:var(--i4)">GHA-123456-7</td><td style="font-size:11.5px;color:var(--i3)">National</td><td><span class="bdg b-g">Active</span></td><td style="font-size:10px;color:var(--i4)">Apr 1, 2026</td><td><button class="btn bg bsm">&#8943;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:28px;height:28px;font-size:9.5px;background:var(--al);color:var(--tl)">KA</div><div><div class="tn">Kwame Asante</div><div style="font-size:10px;color:var(--i4)">@kasante</div></div></div></td><td><span class="bdg b-t">&#129309; Programme Staff</span></td><td style="font-size:11.5px">Grace Store, Phuoc W…</td><td style="font-size:11.5px">+233 267 764 528</td><td style="font-size:10.5px;color:var(--i4)">GHA-300000-5</td><td style="font-size:11.5px;color:var(--i3)">Accra Met / Zone 1</td><td><span class="bdg b-g">Active</span></td><td style="font-size:10px;color:var(--i4)">Apr 14, 2026</td><td><button class="btn bg bsm">&#8943;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:28px;height:28px;font-size:9.5px;background:var(--pl);color:var(--pu)">AO</div><div><div class="tn">Ama Owusu</div><div style="font-size:10px;color:var(--i4)">@aowusu</div></div></div></td><td><span class="bdg b-p">&#128188; Business Owner</span></td><td class="tn" style="font-size:11.5px">Grace Store Yasuo 1</td><td style="font-size:11.5px">+233 244 123 456</td><td style="font-size:10.5px;color:var(--i4)">GHA-200001-3</td><td style="font-size:11.5px;color:var(--i3)">Accra Met</td><td><span class="bdg b-g">Active</span></td><td style="font-size:10px;color:var(--i4)">Apr 14, 2026</td><td><button class="btn bg bsm">&#8943;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:28px;height:28px;font-size:9.5px;background:var(--aml);color:var(--am)">KB</div><div><div class="tn">Kofi Boateng</div><div style="font-size:10px;color:var(--i4)">@kboateng</div></div></div></td><td><span class="bdg b-a">&#129518; Business Power User</span></td><td class="tn" style="font-size:11.5px">Grace Store Yasuo 1</td><td style="font-size:11.5px">+233 244 999 888</td><td style="font-size:10.5px;color:var(--i4)">—</td><td style="font-size:11.5px;color:var(--i3)">Accra Met</td><td><span class="bdg b-g">Active</span></td><td style="font-size:10px;color:var(--i4)">Apr 15, 2026</td><td><button class="btn bg bsm">&#8943;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:28px;height:28px;font-size:9.5px;background:var(--b3);color:var(--i3)">YD</div><div><div class="tn">Yaw Darko</div><div style="font-size:10px;color:var(--i4)">@ydarko</div></div></div></td><td><span class="bdg b-gr">&#128722; Business Staff</span></td><td class="tn" style="font-size:11.5px">Phuoc Warehouse</td><td style="font-size:11.5px">+233 244 777 111</td><td style="font-size:10.5px;color:var(--i4)">—</td><td style="font-size:11.5px;color:var(--i3)">Asunafo South</td><td><span class="bdg b-a">Inactive</span></td><td style="font-size:10px;color:var(--i4)">Apr 13, 2026</td><td><button class="btn bg bsm">&#8943;</button></td></tr>
+<tr><td><div style="display:flex;align-items:center;gap:7px"><div class="av" style="width:28px;height:28px;font-size:9.5px;background:var(--al);color:#15803D">MK</div><div><div class="tn">Maame Koffi</div><div style="font-size:10px;color:var(--i4)">@mkoffi</div></div></div></td><td><span class="bdg b-g">&#127963;&#65039; GRA Officer</span></td><td style="font-size:11.5px;color:var(--i3)">Read-only</td><td style="font-size:11.5px">+233 302 123 456</td><td style="font-size:10.5px;color:var(--i4)">GHA-400001-9</td><td style="font-size:11.5px;color:var(--i3)">National</td><td><span class="bdg b-g">Active</span></td><td style="font-size:10px;color:var(--i4)">Apr 2, 2026</td><td><button class="btn bg bsm">&#8943;</button></td></tr>
+</tbody>
+</table></div>
+<div style="padding:9px 13px;border-top:1px solid var(--b2);display:flex;justify-content:space-between;align-items:center"><span style="font-size:11.5px;color:var(--i3)">6 of 47 accounts</span><div style="display:flex;gap:5px"><button class="btn bs bsm">&#8592; Prev</button><button class="btn bs bsm">Next &#8594;</button></div></div>
+</div>
+</div>
+
+<!-- ====== ROLES & PERMISSIONS ====== -->
+<div class="scr" id="scr-roles">
+<div class="ph"><div><h1>Roles &amp; Permissions</h1><p>Define what each user type can access — and build custom roles</p></div><button class="btn bp bsm">+ Create Custom Role</button></div>
+<div class="sh">Programme Roles <div class="shl"></div></div>
+<div class="g3" style="margin-bottom:16px">
+<div class="rc sel"><div class="rci" style="background:#EEF2FF">&#128081;</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div style="font-size:12.5px;font-weight:600">Programme Admin</div><span class="bdg b-b">Programme</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Full system access. Creates all user types. Manages configurations and audit logs.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptc">Create all users</span><span class="pt ptc">All companies</span><span class="pt ptc">System config</span><span class="pt ptc">All reports</span><span class="pt ptn">Tax payments</span></div></div>
+<div class="rc"><div class="rci" style="background:#F0FDF4">&#128202;</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div style="font-size:12.5px;font-weight:600">Programme Supervisor</div><span class="bdg b-g">Programme</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Manages NSP team. Creates staff accounts, assigns to companies, reviews KPIs.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptc">Create programme staff</span><span class="pt ptc">Assign staff</span><span class="pt ptc">Team reports</span><span class="pt ptn">Edit company records</span></div></div>
+<div class="rc"><div class="rci" style="background:#ECFDF5">&#129309;</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div style="font-size:12.5px;font-weight:600">Programme Staff (NSP)</div><span class="bdg b-t">Programme</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Field worker. Registers MSMEs, loads products &amp; stock. Cannot record sales.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptc">Register MSMEs</span><span class="pt ptc">Product master</span><span class="pt ptc">Inventory setup</span><span class="pt ptn">Record POS sales</span></div></div>
+</div>
+<div class="sh">Business Roles <div class="shl"></div></div>
+<div class="g3" style="margin-bottom:16px">
+<div class="rc"><div class="rci" style="background:#FDF4FF">&#128188;</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div style="font-size:12.5px;font-weight:600">Business Owner</div><span class="bdg b-p">Business</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Only role that can initiate tax payments. Creates and manages business staff.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptc">Full POS</span><span class="pt ptc">Tax payments &#10033;</span><span class="pt ptc">Create staff</span><span class="pt ptc">All reports</span></div></div>
+<div class="rc"><div class="rci" style="background:#FFFBEB">&#129518;</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div style="font-size:12.5px;font-weight:600">Business Power User</div><span class="bdg b-a">Business</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Accountant or manager. Elevated access set by the Business Owner per permission.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptl">POS (if granted)</span><span class="pt ptl">Reports (if granted)</span><span class="pt ptn">Tax payments</span><span class="pt ptn">Create users</span></div></div>
+<div class="rc"><div class="rci" style="background:#F1F5F9">&#128722;</div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px"><div style="font-size:12.5px;font-weight:600">Business Staff</div><span class="bdg b-gr">Business</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Cashier. Access strictly limited to what the Business Owner explicitly enables.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptl">POS sales (if granted)</span><span class="pt ptn">Reports</span><span class="pt ptn">Tax anything</span></div></div>
+</div>
+<div class="sh">Government Roles <div class="shl"></div></div>
+<div style="margin-bottom:18px"><div class="rc" style="display:flex;align-items:flex-start;gap:11px;max-width:560px"><div class="rci" style="background:var(--al);flex-shrink:0">&#127963;&#65039;</div><div><div style="display:flex;align-items:center;gap:7px;margin-bottom:4px"><div style="font-size:12.5px;font-weight:600">GRA Staff / Officer</div><span class="bdg b-g">Government</span><span style="font-size:10px;color:var(--i4)">Read-only</span></div><div style="font-size:11px;color:var(--i3);line-height:1.5;margin-bottom:7px">Views tax submissions, payment status, and downloads compliance reports. Cannot modify any data.</div><div style="display:flex;flex-wrap:wrap;gap:3px"><span class="pt ptc">View submissions</span><span class="pt ptc">Download reports</span><span class="pt ptc">Payment status</span><span class="pt ptn">Modify records</span><span class="pt ptn">POS access</span></div></div></div></div>
+<!-- Custom role builder -->
+<div style="background:var(--sr);border:1.5px dashed var(--b3);border-radius:var(--rlg);padding:16px">
+<div style="font-size:13px;font-weight:600;color:var(--ink);margin-bottom:11px">+ Build a Custom Role</div>
+<div class="fr" style="margin-bottom:11px"><div class="fg"><label class="fl">Role name</label><input class="fi" placeholder="e.g. District Compliance Officer"></div><div class="fg"><label class="fl">Role category</label><select class="fs"><option>Programme role</option><option>Business role</option><option>Government role</option></select></div></div>
+<div class="fr3">
+<div><div style="font-size:10px;font-weight:600;color:var(--i3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Companies</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b2)"><span style="font-size:11.5px">View all companies</span><button class="tog on"></button></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b2)"><span style="font-size:11.5px">Create company</span><button class="tog"></button></div><div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:11.5px">Edit company details</span><button class="tog"></button></div></div>
+<div><div style="font-size:10px;font-weight:600;color:var(--i3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Tax &amp; Submissions</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b2)"><span style="font-size:11.5px">View submissions</span><button class="tog on"></button></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b2)"><span style="font-size:11.5px">Initiate tax payment</span><button class="tog"></button></div><div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:11.5px">Download reports</span><button class="tog on"></button></div></div>
+<div><div style="font-size:10px;font-weight:600;color:var(--i3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px">Staff &amp; Accounts</div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b2)"><span style="font-size:11.5px">View staff list</span><button class="tog on"></button></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b2)"><span style="font-size:11.5px">Create staff accounts</span><button class="tog"></button></div><div style="display:flex;justify-content:space-between;padding:5px 0"><span style="font-size:11.5px">Assign to companies</span><button class="tog"></button></div></div>
+</div>
+<div style="margin-top:11px;display:flex;gap:6px"><button class="btn bp bsm">Save Custom Role</button><button class="btn bs bsm">Cancel</button></div>
+</div>
+</div>
+
+  </div><!-- /cnt -->
+</div><!-- /main -->
+</div><!-- /lay -->
+
+<!-- MODAL: CREATE ACCOUNT -->
+<div class="ovl" id="mcr" onclick="if(event.target===this)this.classList.remove('show')">
+<div class="modal">
+<div class="mhdr"><div><h2>Create Account</h2><div style="font-size:11px;color:var(--i3);margin-top:2px">Select a role — the relevant fields appear below</div></div><button class="cbtn" onclick="document.getElementById('mcr').classList.remove('show')">&#10005;</button></div>
+<div class="mbdy">
+<div class="fg"><label class="fl">Account role <span class="rq">*</span></label>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="rp">
+<div class="rc" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#128081;</div><div style="font-size:10.5px;font-weight:600">Programme Admin</div></div>
+<div class="rc" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#128202;</div><div style="font-size:10.5px;font-weight:600">Supervisor</div></div>
+<div class="rc sel" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#129309;</div><div style="font-size:10.5px;font-weight:600;color:var(--brand)">Programme Staff</div></div>
+<div class="rc" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#128188;</div><div style="font-size:10.5px;font-weight:600">Business Owner</div></div>
+<div class="rc" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#129518;</div><div style="font-size:10.5px;font-weight:600">Power User</div></div>
+<div class="rc" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#128722;</div><div style="font-size:10.5px;font-weight:600">Business Staff</div></div>
+<div class="rc" style="padding:9px;text-align:center" onclick="pr(this)"><div style="font-size:17px;margin-bottom:3px">&#127963;&#65039;</div><div style="font-size:10.5px;font-weight:600">GRA Officer</div></div>
+</div>
+</div>
+<div class="alt ai" style="margin-top:3px">&#8505;&#65039; <span><strong>Selected: Programme Staff (NSP)</strong> — Can register MSMEs, load products and inventory from web portal. Cannot record sales on POS.</span></div>
+<div class="fr"><div class="fg"><label class="fl">Full name <span class="rq">*</span></label><input class="fi" placeholder="First and last name"></div><div class="fg"><label class="fl">Username <span class="rq">*</span></label><input class="fi" placeholder="Unique username (no spaces)"><div class="fh">Used to log in to the system and POS</div></div></div>
+<div class="fr"><div class="fg"><label class="fl">Phone number <span class="rq">*</span></label><input class="fi" placeholder="+233 XX XXX XXXX"></div><div class="fg"><label class="fl">Email address</label><input class="fi" placeholder="optional@email.com"></div></div>
+<div class="fr"><div class="fg"><label class="fl">Ghana Card number <span class="rq">*</span></label><input class="fi" placeholder="GHA-XXXXXXXXX-X" style="font-family:'DM Mono',monospace"></div><div class="fg"><label class="fl">Temporary password <span class="rq">*</span></label><input class="fi" type="password" placeholder="Min. 8 characters"><div class="fh">User is prompted to change on first login</div></div></div>
+<div style="background:var(--b2);border-radius:var(--rmd);padding:12px;margin-top:3px">
+<div style="font-size:10px;font-weight:600;color:var(--i3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px">Programme Staff Assignment</div>
+<div class="fr"><div class="fg"><label class="fl">District <span class="rq">*</span></label><select class="fs"><option value="">Select district…</option><option>Accra Metropolitan</option><option>Kumasi Metropolitan</option></select></div><div class="fg"><label class="fl">Zone</label><select class="fs"><option value="">Select zone…</option><option>Zone 1 — Makola</option><option>Zone 2 — Kantamanto</option></select></div></div>
+<div class="fg"><label class="fl">Supervised by</label><select class="fs"><option value="">Select supervisor…</option><option>Ama Supervisor — Accra Met</option></select><div class="fh">Optional — assign later if needed</div></div>
+<div class="fg"><label class="fl">Assign to companies</label><input class="fi" placeholder="Search and select companies…"><div class="fh">Optional — can be assigned from the Companies page later</div></div>
+</div>
+</div>
+<div class="mftr"><button class="btn bg" onclick="document.getElementById('mcr').classList.remove('show')">Cancel</button><button class="btn bs bsm">Save &amp; Create Another</button><button class="btn bp">Create Account</button></div>
+</div>
+</div>
+
+<script>
+const TT={'dashboard':'Dashboard','companies':'Companies','new-company':'New Company','tax-config':'Tax Configurations','staff-tools':'Staff Portal','product-master':'Product Master','inventory':'Stores & Inventory','devices':'Device Management','visits':'Visit Logs','accounts':'Accounts & Staff','roles':'Roles & Permissions'};
+function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('v'));const el=document.getElementById('scr-'+id);if(el)el.classList.add('v');document.getElementById('ttl').textContent=TT[id]||id;document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));}
+function goT(t,id){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');go(id);}
+document.querySelectorAll('.tog').forEach(t=>t.addEventListener('click',()=>t.classList.toggle('on')));
+function pr(el){document.querySelectorAll('#rp .rc').forEach(r=>{r.classList.remove('sel');const d=r.querySelector('div:last-child');if(d)d.style.color='';});el.classList.add('sel');const d=el.querySelector('div:last-child');if(d)d.style.color='var(--brand)';}
+</script>
+</body>
+</html>
